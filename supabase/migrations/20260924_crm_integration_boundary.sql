@@ -65,17 +65,13 @@ alter table public.integration_crm_messages enable row level security;
 alter table public.integration_crm_outbox enable row level security;
 
 create policy "admins read crm contacts" on public.integration_crm_contacts
-  for select to authenticated using (exists(
-    select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  for select to authenticated using (public.is_admin());
 create policy "admins read crm inbox" on public.integration_crm_inbox
-  for select to authenticated using (exists(
-    select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  for select to authenticated using (public.is_admin());
 create policy "admins read crm messages" on public.integration_crm_messages
-  for select to authenticated using (exists(
-    select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  for select to authenticated using (public.is_admin());
 create policy "admins read crm outbox" on public.integration_crm_outbox
-  for select to authenticated using (exists(
-    select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  for select to authenticated using (public.is_admin());
 
 -- Atualização e deduplicação são uma transação indivisível. A rota valida o HMAC.
 create or replace function public.ingest_integration_crm_event(

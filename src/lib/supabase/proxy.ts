@@ -24,6 +24,10 @@ export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
   const { pathname } = request.nextUrl;
 
+  // O CRM não possui sessão de usuário. A rota autentica cada evento pelo
+  // HMAC antes de acessar o banco; não redirecionar webhooks para /login.
+  if (pathname === "/api/integrations/crm") return response;
+
   const { url, anonKey } = getSupabaseEnv();
 
   const supabase = createServerClient(url, anonKey, {

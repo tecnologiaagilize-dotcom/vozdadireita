@@ -1,5 +1,6 @@
 -- Primeiro módulo do Voz da Direita. Realizadora: Tr@de Tecnologia.
--- Aplicar depois de supabase/schema.sql; NÃO importar o schema do RH eleitoral neste banco.
+-- Aplicar depois das migrações 0001–0003 do próprio Voz da Direita.
+-- Usa public.is_admin() e os perfis existentes neste repositório.
 create table if not exists public.integration_elections (
   id uuid primary key default gen_random_uuid(),
   year integer not null check (year between 2026 and 2100),
@@ -105,26 +106,26 @@ alter table public.integration_contact_queue enable row level security;
 alter table public.integration_call_events enable row level security;
 
 create policy "admins elections" on public.integration_elections for all to authenticated
-  using (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'))
-  with check (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  using (public.is_admin())
+  with check (public.is_admin());
 create policy "admins catalog" on public.integration_candidate_catalog for all to authenticated
-  using (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'))
-  with check (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  using (public.is_admin())
+  with check (public.is_admin());
 create policy "admins teams" on public.integration_teams for all to authenticated
-  using (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'))
-  with check (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  using (public.is_admin())
+  with check (public.is_admin());
 create policy "admins team members" on public.integration_team_members for all to authenticated
-  using (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'))
-  with check (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  using (public.is_admin())
+  with check (public.is_admin());
 create policy "admins studies" on public.integration_studies for all to authenticated
-  using (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'))
-  with check (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  using (public.is_admin())
+  with check (public.is_admin());
 create policy "admins queue" on public.integration_contact_queue for all to authenticated
-  using (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'))
-  with check (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  using (public.is_admin())
+  with check (public.is_admin());
 create policy "admins call events" on public.integration_call_events for all to authenticated
-  using (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'))
-  with check (exists(select 1 from public.admin_profiles a where a.id = (select auth.uid()) and a.role = 'admin'));
+  using (public.is_admin())
+  with check (public.is_admin());
 
 insert into public.integration_elections(year, kind, label)
 values (2026, 'general', 'Eleições gerais 2026'), (2028, 'municipal', 'Eleições municipais 2028')

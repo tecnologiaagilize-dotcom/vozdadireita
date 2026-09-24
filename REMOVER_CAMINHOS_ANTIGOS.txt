@@ -1,8 +1,0 @@
-Remova estes arquivos do repositório vozdadireita antes de copiar os demais:
-app/admin/integracao/actions.ts
-app/admin/integracao/page.tsx
-app/api/integrations/crm/route.ts
-components/admin/AdminShell.tsx
-
-Instale as migrações em homologação na ordem: 0001–0003, 20260924_integrated_political_core.sql, 20260924_crm_integration_boundary.sql.
-Não aplique o ZIP anterior do MFB neste repositório.
